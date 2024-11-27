@@ -63,7 +63,7 @@ const sketch = (p) => {
 let ballImg1;
 
 p.preload = () => {
-    ballImg1 = p.loadImage('/kugle_1.png');
+    ballImg1 = p.loadImage('./kugle_1.png');
 }
 
   p.setup = () => {
