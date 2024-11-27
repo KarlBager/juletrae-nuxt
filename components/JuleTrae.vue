@@ -67,20 +67,26 @@ p.preload = () => {
     ballImg1 = p.loadImage('/kugle_1.png');
 }
 
+
   p.setup = () => {
     p.createCanvas(2000, 2000);
   };
 
   p.draw = () => {
-
+    p.clear();
     p.fill('#D17475');
     p.noStroke();
     //p.circle(100,20,20,20);
 
+    //console.log(`${p.mouseX}, ${p.mouseY}`);
+
+    p.textSize(56);
     p.imageMode(p.CENTER);
 
-    console.log(ballsCode.value);
     generateBalls(p, balls.value);
+
+    hoverBox(p, balls.value, p.mouseX, p.mouseY);
+
 
   };
 };
@@ -92,10 +98,40 @@ if (p5Container.value) {
     console.error('p5Container is not initialized');
   }
 
+
 }
 
 
+function hoverBox(p, ballArray, mouseX, mouseY){
+  const ballCount = ballArray.length;
 
+//console.log(`${mouseX}, ${mouseY}`);
+
+  //tjek om musen hover over kugle
+  for(let i = 0; i < ballCount; i++){
+    const ballX = ballArray[i].x;
+    const ballY = ballArray[i].y;
+    const ballName = ballArray[i].name;
+    const ballColor = ballArray[i].color;
+
+    let zoneRadius = 40;
+
+    function isNear(x1, y1, x2, y2){
+      
+      if(x1 > x2 - zoneRadius && x1 < x2 + zoneRadius && y1 > y2 - zoneRadius && y1 < y2 + zoneRadius){
+        return true;
+      } else{
+        return false;
+      }
+    }
+
+    if(isNear(mouseX, mouseY, ballX, ballY)){
+      console.log("Kugle: " + ballName);
+      p.fill("#ffffff");
+      p.text(ballName, mouseX + 100, mouseY);
+    }
+  }
+}
 
 
 function generateBalls(p, ballArray){
