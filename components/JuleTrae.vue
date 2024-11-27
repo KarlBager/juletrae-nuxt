@@ -51,6 +51,7 @@ function generateBallCode(ballArray){
 
 const { $p5 } = useNuxtApp();
 
+let ballImg1;
 
 function generateP5Balls(){
 
@@ -60,7 +61,6 @@ generateBallCode(balls.value);
 // Define the p5 sketch function
 const sketch = (p) => {
 
-let ballImg1;
 
 p.preload = () => {
   ballImg1 = p.loadImage('/kugle_1.png', 
