@@ -115,9 +115,6 @@ onUnmounted(() => {
   }
 });
 
-// Remove the "hidden" class by setting isHidden to false
-//isHidden.value = false;
-
 
 </script>
 
@@ -125,7 +122,7 @@ onUnmounted(() => {
 
   <div id="juletrae">
 
-  <img src="../../juletrae.png" />
+  <img src="/juletrae.png" />
 
   </div>
 
