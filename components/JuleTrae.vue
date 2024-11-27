@@ -62,11 +62,9 @@ generateBallCode(balls.value);
 const sketch = (p) => {
 
 
+
 p.preload = () => {
-  ballImg1 = p.loadImage('/kugle_1.png', 
-        () => console.log('Image loaded successfully'), 
-        (err) => console.error('Image failed to load', err)
-    );
+    ballImg1 = p.loadImage('/kugle_1.png');
 }
 
   p.setup = () => {
@@ -82,7 +80,7 @@ p.preload = () => {
     p.imageMode(p.CENTER);
 
     console.log(ballsCode.value);
-    eval(ballsCode.value);
+    generateBalls(p, balls.value);
 
   };
 };
@@ -95,6 +93,39 @@ if (p5Container.value) {
   }
 
 }
+
+
+
+
+
+function generateBalls(p, ballArray){
+
+    //gem længden på array ned i konstant
+    const ballCount = ballArray.length;
+
+
+
+    for(let i = 0; i < ballCount; i++){
+    
+    //Definer costumizations
+    const ballStyle = ballArray[i].style;
+    const ballX = ballArray[i].x;
+    const ballY = ballArray[i].y;
+    const ballColor = ballArray[i].color;
+
+
+    if(ballStyle==1){
+    p.fill(ballColor);
+    p.circle(ballX, ballY + 15, 140, 140);
+
+    //Læg billedet på
+    p.image(ballImg1, ballX, ballY);
+    }
+
+};
+}
+
+
 
 onMounted(
 async () => {
