@@ -298,7 +298,6 @@ p.preload = () => {
   p.setup = () => {
     p.createCanvas(2000, 2000);
 
-    p.frameRate(240);
 
     // Create an off-screen graphics layer
     drawLayer = p.createGraphics(2000, 2000);
