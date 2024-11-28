@@ -212,6 +212,7 @@ p.preload = () => {
 }
 
   p.setup = () => {
+    p.pixelDensity(1);
     p.createCanvas(2000, 2000, p.P2D);
   };
 
@@ -299,6 +300,7 @@ p.preload = () => {
 }
 
   p.setup = () => {
+    p.pixelDensity(1);
     p.createCanvas(2000, 2000, p.P2D);
 
 
@@ -309,6 +311,7 @@ p.preload = () => {
   };
 
   p.draw = () => {
+    p.frameRate(60);
 
     if(isPlacing.value || isFillingForm.value){
         p.frameRate(1);

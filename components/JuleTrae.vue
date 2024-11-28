@@ -133,6 +133,7 @@ p.preload = () => {
 
 
   p.setup = () => {
+    p.pixelDensity(1);
     p.createCanvas(2000, 2000, p.P2D);
   };
 
