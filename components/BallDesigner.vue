@@ -450,15 +450,15 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
     line-height: 1.1;
     padding: 10px;
     background-color: rgba(0,0,0,0);
-    font-size: 3rem;
+    font-size: 5vh;
     font-family: 'Space Grotesk';
     border: solid 3px;
     position: absolute;
-    top: 84vh;
+    top: 84.2vh;
 }
 
 #finish-drawing-button{
-    left: 81.4vh;
+    left: 81.8vh;
     background-color: #697C5C;
     border-color: #3D3D3D;
     color: #F9ED7A;
@@ -493,7 +493,7 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 #brush-color-selector-container{
     align-items: end;
     position: absolute;
-    left: 79.4vh;
+    left: 79vh;
     top: 1vh;
 }
 
@@ -503,7 +503,7 @@ display: flex;
 flex-direction: column;
 color: #eeeeee;
 font-family: 'Space Grotesk';
-font-size: 2rem;
+font-size: 3.4vh;
 }
 
 
@@ -511,8 +511,8 @@ div.color-selectors{
     border: solid 3px #eeeeee;
     border-radius: 100%;
     overflow: hidden;
-    height: 140px;
-    width: 140px;  
+    height: 19.3vh;
+    width: 19.3vh;  
 }
 
 input.color-selectors{

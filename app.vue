@@ -125,6 +125,8 @@ overflow: hidden;
 
 html{
   background-color: white;
+  width: 100vh;
+  height: 100vh;
 }
 
 body{
