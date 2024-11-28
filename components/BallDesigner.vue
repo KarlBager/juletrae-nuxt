@@ -212,7 +212,7 @@ p.preload = () => {
 }
 
   p.setup = () => {
-    p.createCanvas(2000, 2000);
+    p.createCanvas(2000, 2000, p.P2D);
   };
 
   p.draw = () => {
@@ -299,7 +299,7 @@ p.preload = () => {
 }
 
   p.setup = () => {
-    p.createCanvas(2000, 2000);
+    p.createCanvas(2000, 2000, p.P2D);
 
 
     // Create an off-screen graphics layer
