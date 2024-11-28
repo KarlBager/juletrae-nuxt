@@ -13,7 +13,7 @@ const pool = mysql.createPool({
 export default defineEventHandler(async (event) => {
   try {
     // Example query
-    const [rows] = await pool.query('SELECT * FROM julekugler');
+    const [rows] = await pool.query('SELECT SQL_NO_CACHE * FROM julekugler');
     return rows;
   } catch (error) {
     console.error('Error fetching balls:', err.message); // Log the error

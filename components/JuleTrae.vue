@@ -1,6 +1,8 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { watch, defineProps, ref, onMounted, onUnmounted } from 'vue';
 import { useNuxtApp } from '#app';
+
+const emit = defineEmits(['isReloaded']);
 
 
 // Define a ref for the container
@@ -13,49 +15,99 @@ const balls = ref([]);
 
 
 
-function generateBallCode(ballArray){
-   
-    //global ballscode variabel
-    ballsCode.value = "";
-
-    //gem længden på array ned i konstant
-    const ballCount = ballArray.length;
-
-
-
-    for(let i = 0; i < ballCount; i++){
-    let newBallCode;
-
-    //Definer costumizations
-    const ballStyle = ballArray[i].style;
-    const ballX = ballArray[i].x;
-    const ballY = ballArray[i].y;
-    const ballColor = ballArray[i].color;
+// Define the prop
+const props = defineProps({
+  shouldReload: {
+    type: Boolean,
+    default: false
+  }
+});
 
 
-    if(ballStyle==1){
-    newBallCode = `p.fill('${ballColor}'); p.circle(${ballX}, ${ballY + 15}, 140, 140);`;
+watch(() => props.shouldReload, (newValue) => {
+  if (newValue) {
+    
+    reloadBalls();
+  }
+});
+
+
+
+function reloadBalls() {
+
+  //console.log('Kører Funktionen');
+  // Declare the newBalls variable here to ensure it's accessible
+  let newBalls;
+
+  // Define the async function correctly and call it
+  const fetchBalls = async () => {
+    try {
+      newBalls = await $fetch('/api/balls');
+      balls.value = newBalls;
+      generateP5Balls();  // Only call generateP5Balls after data is fetched
+      emit('isReloaded');  // Emit after everything is done
+    } catch (error) {
+      console.error('Failed to fetch balls:', error);
     }
+  };
 
-    //Læg billedet på
-    newBallCode += `p.image(ballImg${ballStyle}, ${ballX}, ${ballY});`;
-
-    newBallCode += ``;
-
-
-    ballsCode.value+= newBallCode;
-
-    }
-
+  // Call the async function immediately
+  fetchBalls();
 }
+
+
+
+
+// function generateBallCode(ballArray){
+   
+//     //global ballscode variabel
+//     ballsCode.value = "";
+
+//     //gem længden på array ned i konstant
+//     const ballCount = ballArray.length;
+
+
+
+//     for(let i = 0; i < ballCount; i++){
+//     let newBallCode;
+
+//     //Definer costumizations
+//     const ballStyle = ballArray[i].style;
+//     const ballX = ballArray[i].x;
+//     const ballY = ballArray[i].y;
+//     const ballColor = ballArray[i].color;
+
+
+//     if(ballStyle==1){
+//     newBallCode = `p.fill('${ballColor}'); p.circle(${ballX}, ${ballY + 15}, 140, 140);`;
+//     }
+
+//     //Læg billedet på
+//     newBallCode += `p.image(ballImg${ballStyle}, ${ballX}, ${ballY});`;
+
+//     newBallCode += ``;
+
+
+//     ballsCode.value+= newBallCode;
+
+//     }
+
+// }
+
+
+
 
 const { $p5 } = useNuxtApp();
 
 let ballImg1;
+let banner;
+
 
 function generateP5Balls(){
+  //console.log('Så langt så godt', balls.value)
+  
 
-generateBallCode(balls.value);
+//generateBallCode(balls.value);
 //console.log(ballsCode.value);
 
 // Define the p5 sketch function
@@ -65,6 +117,8 @@ const sketch = (p) => {
 
 p.preload = () => {
     ballImg1 = p.loadImage('/kugle_1.png');
+
+    banner = p.loadImage('/banner.png');
 }
 
 
@@ -80,13 +134,12 @@ p.preload = () => {
 
     //console.log(`${p.mouseX}, ${p.mouseY}`);
 
-    p.textSize(56);
     p.imageMode(p.CENTER);
 
-    generateBalls(p, balls.value);
+    const ballsArrayVar = balls.value;
+    generateBalls(p, ballsArrayVar);
 
     hoverBox(p, balls.value, p.mouseX, p.mouseY);
-
 
   };
 };
@@ -103,7 +156,7 @@ if (p5Container.value) {
 
 
 function hoverBox(p, ballArray, mouseX, mouseY){
-  const ballCount = ballArray.length;
+  let ballCount = ballArray.length;
 
 //console.log(`${mouseX}, ${mouseY}`);
 
@@ -113,6 +166,15 @@ function hoverBox(p, ballArray, mouseX, mouseY){
     const ballY = ballArray[i].y;
     const ballName = ballArray[i].name;
     const ballColor = ballArray[i].color;
+    const ballClass = ballArray[i].student_class;
+    const ballTime = new Date(ballArray[i].time);
+   
+    // Extract the day, month, and year
+    const day = String(ballTime.getDate()).padStart(2, '0'); // Ensure 2-digit day
+    const month = String(ballTime.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = ballTime.getFullYear(); // Get the full year
+
+    const ballTimeFormatted = `${day}/${month}-${year}`;
 
     let zoneRadius = 40;
 
@@ -126,18 +188,42 @@ function hoverBox(p, ballArray, mouseX, mouseY){
     }
 
     if(isNear(mouseX, mouseY, ballX, ballY)){
-      console.log("Kugle: " + ballName);
-      p.fill("#ffffff");
-      p.text(ballName, mouseX + 100, mouseY);
+      //console.log("Kugle: " + ballName);
+      p.image(banner, mouseX + 300, mouseY);
+      p.fill("#3D3D3D");
+      p.textSize(42);
+      p.textAlign(p.CENTER);
+      p.text(`${ballName}, ${ballClass}`, mouseX + 300, mouseY - 12);
+      p.textSize(28);
+      p.text(`${ballTimeFormatted}`, mouseX + 300, mouseY + 30);
     }
   }
 }
 
 
+
+
+
+function drawDrawing(p, drawingCode, ballX, ballY){
+
+const drawingCodeConst = drawingCode;
+p.push();
+p.translate(ballX-100, ballY-100);
+p.scale(0.1);
+//console.log(drawingCodeConst);
+eval(drawingCodeConst);
+p.pop();
+
+}
+
+
+
+
 function generateBalls(p, ballArray){
 
     //gem længden på array ned i konstant
-    const ballCount = ballArray.length;
+    let ballCount = ballArray.length;
+    //console.log(ballCount);
 
 
 
@@ -148,11 +234,16 @@ function generateBalls(p, ballArray){
     const ballX = ballArray[i].x;
     const ballY = ballArray[i].y;
     const ballColor = ballArray[i].color;
-
+    const drawingCode = ballArray[i].artwork;
 
     if(ballStyle==1){
     p.fill(ballColor);
     p.circle(ballX, ballY + 15, 140, 140);
+
+    
+    //Læg tegning på
+    drawDrawing(p, drawingCode, ballX, ballY);
+
 
     //Læg billedet på
     p.image(ballImg1, ballX, ballY);
@@ -171,17 +262,19 @@ async () => {
     console.error('Failed to fetch balls:', error);
   }
 
-
   generateP5Balls();
   //console.log(balls.value[0]);
 
-});
+}
+
+);
+
 
 
 onUnmounted(() => {
   if (p5Instance) {
     p5Instance.remove();
-    console.log('p5 instance removed');
+    //console.log('p5 instance removed');
   }
 });
 
@@ -196,13 +289,21 @@ onUnmounted(() => {
 
   </div>
 
+
+
   <main ref="p5Container"></main>
 
+  <h1 @click="reloadBalls">{{ props.shouldReload }}</h1>
 
 </template>
 
 
 <style>
+
+#defaultCanvas0{
+    position: absolute;
+    z-index: 0;
+}
 
 #juletrae{
     width: 100vh;
