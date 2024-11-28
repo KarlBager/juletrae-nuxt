@@ -137,6 +137,11 @@ p.preload = () => {
   };
 
   p.draw = () => {
+    if(!props.hoverBoxesEnabled){
+      p.frameRate(1);
+    }
+
+
     p.clear();
     p.fill('#D17475');
     p.noStroke();
@@ -148,6 +153,8 @@ p.preload = () => {
 
     const ballsArrayVar = balls.value;
     generateBalls(p, ballsArrayVar);
+
+    
 
     if(props.hoverBoxesEnabled){
     hoverBox(p, balls.value, p.mouseX, p.mouseY);

@@ -80,6 +80,7 @@ buildPlacementSketch();
 function backToDraw(){
     isPainting.value = true;
     isPlacing.value = false;
+    isFillingForm.value = false;
 
     if(isMounted){
         const p5DrawingCanvasEl = document.querySelector('#defaultCanvas1');
@@ -215,6 +216,8 @@ p.preload = () => {
   };
 
   p.draw = () => {
+
+    p.frameRate(24);
     
     //Definer costumizations
     const ballStyle = 1;
@@ -306,6 +309,10 @@ p.preload = () => {
   };
 
   p.draw = () => {
+
+    if(isPlacing.value || isFillingForm.value){
+        p.frameRate(1);
+    }
 
     p.clear();
 
