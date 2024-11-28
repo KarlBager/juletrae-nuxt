@@ -101,9 +101,9 @@ padding: 10px;
 position: absolute;
 z-index: 3;
 font-size: 5vh;
-background: #FFF7EA;
+background: #697C5C;
 border: solid 3px #3D3D3D;
-color: #3D3D3D;
+color: #F9ED7A;
 font-family: 'Space Grotesk';
 }
 

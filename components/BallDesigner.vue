@@ -394,7 +394,7 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 
 <div id="place-guide" v-if="isPlacing">
     <div>    
-        <h2>Placer din julekugle</h2>
+        <h2>Placér din julekugle</h2>
         <p>Vælg med omhu – kuglen kan ikke<br> ændres igen</p>
     </div>
 </div>
