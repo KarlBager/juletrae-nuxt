@@ -556,7 +556,7 @@ input.color-selectors{
     width: 100%;
     height: 100%;
     position: absolute;
-    z-index: 3 !important;
+    z-index: 3;
 }
 
 
@@ -606,15 +606,18 @@ input.color-selectors{
     background-image: url('/banner.png');
     background-size: 100%;
     background-position: center;
-    padding: 5rem;
+    background-repeat: no-repeat;
+    padding: 9vh;
     left: 50vh;
-    top: 36vh
+    top: 36vh;
+    width: 31vh;
 }
 
-#place-guide h1{
+#place-guide h2{
     color: #3D3D3D;
-    line-height: 0;
+    line-height: 1.2;
     margin: 0;
+    font-size: 3vh;
 }
 
 #place-guide p{
@@ -622,6 +625,7 @@ input.color-selectors{
     font-weight: 500;
     line-height: 1.2;
     margin: 0;
+    font-size: 1.9vh;
 }
 
 
