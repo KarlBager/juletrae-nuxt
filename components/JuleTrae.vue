@@ -293,8 +293,6 @@ onUnmounted(() => {
 
   <main ref="p5Container"></main>
 
-  <h1 @click="reloadBalls">{{ props.shouldReload }}</h1>
-
 </template>
 
 
