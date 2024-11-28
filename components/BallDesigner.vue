@@ -258,6 +258,14 @@ p.preload = () => {
     mouseDown = false;
   }
 
+  p.touchStarted = () => {
+    mouseDown = true;
+  }
+
+  p.touchEnded = () => {
+    mouseDown = false;
+  }
+
 
 };
 
@@ -349,8 +357,16 @@ p.preload = () => {
 
   p.mouseReleased = () => {
     mouseDown = false;
-    
   }
+
+  p.touchStarted = () => {
+    mouseDown = true;
+  }
+
+  p.touchEnded = () => {
+    mouseDown = false;
+  }
+
 };
 
 

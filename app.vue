@@ -134,6 +134,7 @@ width: 100vh;
 height: 100vh;
 background-color: #E9E0D3;
 margin: 0;
+touch-action: none;
 }
 
 canvas{
