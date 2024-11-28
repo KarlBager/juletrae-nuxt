@@ -171,7 +171,7 @@ function insertBall(){
     };
 
     addBall(newBall);
-    setCookie('ballSubmitted', 'true', 1);
+    setCookie('ballSubmitted', 'true', 30);
 
 
     isFillingForm = false;
@@ -417,6 +417,7 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
                 </div>
                 </div>
             </div>
+            <p id="cookienotice"><i>Ved at trykke 'Gem din julekugle' accepterer du brugen af en enkelt cookie,<br> der blot registrerer at du har hængt en julekugle på træet.</i></p>
         </div>
     </div>
 </div>
@@ -429,6 +430,14 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 
 
 <style>
+#cookienotice{
+    text-align: center;
+    color: rgb(147, 146, 146);
+    font-size: 1.2vh;
+    position: absolute;
+    top: 93vh
+}
+
 #save-ball-button-container{
     display: flex;
     flex-direction: column;
@@ -520,8 +529,8 @@ input.color-selectors{
     left: -10px;
     top: -10px;
     background-color: rgba(0,0,0,0);
-    height: 200px;
-    width: 200px;  
+    height: 300px;
+    width: 300px;  
     padding: 0px -0px;
     overflow: hidden;
 }
