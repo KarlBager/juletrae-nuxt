@@ -1,13 +1,13 @@
 <script setup>
 import JuleTrae from './components/JuleTrae.vue';
 import BallDesigner from './components/BallDesigner.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 
 let ballExists = ref(false);
 let designingBall = ref(false);
-
 let shouldReload = ref(false);
+let hoverBoxesEnabled = ref(true);
 
 
 function triggerBallDesigner(){
@@ -17,8 +17,13 @@ function triggerBallDesigner(){
 function finishBallDesign(){
   designingBall.value = false;
   ballExists.value = true;
+  hoverBoxesEnabled.value = true;
 
   reloadJuletrae();
+}
+
+function disableHoverBoxes(){
+  hoverBoxesEnabled.value = false;
 }
 
 
@@ -35,6 +40,26 @@ function juletraeReloaded(){
 }
 
 
+onMounted(() => {
+
+  function getCookie(name) {
+    const cookieArr = document.cookie.split(';');
+    for (let cookie of cookieArr) {
+      const [key, value] = cookie.trim().split('=');
+      if (key === name) return value;
+    }
+    return null;
+  }
+
+  let isBallSubmitted = getCookie('ballSubmitted');
+  if(isBallSubmitted){
+    ballExists.value = true;
+  }
+
+})
+
+
+
 </script>
 
 <template>
@@ -42,11 +67,11 @@ function juletraeReloaded(){
 
 
 
-    <JuleTrae @isReloaded="juletraeReloaded" :shouldReload="shouldReload" />
+    <JuleTrae @isReloaded="juletraeReloaded" :shouldReload="shouldReload" :hoverBoxesEnabled="hoverBoxesEnabled"/>
 
-    <button class="start-buttons" v-if="!ballExists && !designingBall" @click="triggerBallDesigner">Tilføj din <br>julekugle</button>
+    <button class="start-buttons" id="start-button" v-if="!ballExists && !designingBall" @click="triggerBallDesigner">Tilføj din <br>julekugle</button>
     
-    <BallDesigner @ballFinished="finishBallDesign" v-if="designingBall" />
+    <BallDesigner @ballFinished="finishBallDesign" @placingBall="disableHoverBoxes" v-if="designingBall" />
 
 
   </header>
@@ -64,10 +89,17 @@ function juletraeReloaded(){
 
 <style>
 
+
+#start-button{
+  top: 30vh;
+  left: 10vh;
+}
+
 .start-buttons{
+line-height: 1;
+padding: 10px;
 position: absolute;
-top: 30vh;
-left: 10vh;
+z-index: 3;
 font-size: 5vh;
 background: #FFF7EA;
 border: solid 3px #3D3D3D;

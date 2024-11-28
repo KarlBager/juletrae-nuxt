@@ -10,6 +10,7 @@ const p5Container = ref(null);
 let p5Instance = null;
 
 let ballsCode = ref('');
+let hoverBoxesEnabled = ref(true);
 
 const balls = ref([]);
 
@@ -20,6 +21,10 @@ const props = defineProps({
   shouldReload: {
     type: Boolean,
     default: false
+  },
+  hoverBoxesEnabled: {
+    type: Boolean,
+    default: true
   }
 });
 
@@ -30,6 +35,11 @@ watch(() => props.shouldReload, (newValue) => {
     reloadBalls();
   }
 });
+
+
+
+
+
 
 
 
@@ -139,8 +149,9 @@ p.preload = () => {
     const ballsArrayVar = balls.value;
     generateBalls(p, ballsArrayVar);
 
+    if(props.hoverBoxesEnabled){
     hoverBox(p, balls.value, p.mouseX, p.mouseY);
-
+    }
   };
 };
 
@@ -301,6 +312,11 @@ onUnmounted(() => {
 #defaultCanvas0{
     position: absolute;
     z-index: 0;
+}
+
+#defaultCanvas2{
+  position: absolute;
+  z-index: 1;
 }
 
 #juletrae{

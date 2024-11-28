@@ -1,12 +1,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 
-const emit = defineEmits(['ballFinished']);
+const emit = defineEmits(['ballFinished', 'placingBall']);
 
 let isMounted = ref(false);
 
 let isPainting = ref(false);
-
+let isPlacing = ref(false);
 let isFillingForm = ref(false);
 
 let userName = ref('');
@@ -14,6 +14,10 @@ let userClass = ref('');
 
 let ballXGlobal = ref();
 let ballYGlobal = ref();
+
+
+console.log(window);
+
 
 onMounted(() => {
 
@@ -24,7 +28,6 @@ isPainting.value = true;
 
 
 
-let isPlacing = ref(false);
 
 let ballBackgroundColor = ref('#D17475'); // Initial background color
 let brushColor = ref('#F9ED7A');
@@ -49,8 +52,18 @@ function clearDrawing(){
 }
 
 
+function clearSelection(){
+    if(isMounted.value){
+ if (window.getSelection) {window.getSelection().removeAllRanges();}
+ else if (document.selection) {document.selection.empty();}
+}
+}
+
 
 function finishDrawing(){
+    emit('placingBall');
+    clearSelection();
+
     isPainting.value = false;
     isPlacing.value = true;
 
@@ -68,16 +81,16 @@ function backToDraw(){
     isPainting.value = true;
     isPlacing.value = false;
 
-    // if(isMounted){
-    //     const p5DrawingCanvasEl = document.querySelector('#defaultCanvas1');
-    //     p5DrawingCanvasEl.classList.remove('hidden');
-    // }
+    if(isMounted){
+        const p5DrawingCanvasEl = document.querySelector('#defaultCanvas1');
+        p5DrawingCanvasEl.classList.remove('hidden');
+    }
 }
 
 
 function triggerForm(){
     isPlacing.value = false;
-    isFillingForm = true;
+    isFillingForm.value = true;
 
 
     // if(isMounted){
@@ -88,7 +101,7 @@ function triggerForm(){
 
 function backToPlacing(){
     isPlacing.value = true;
-    isFillingForm = false;
+    isFillingForm.value = false;
 
 
 
@@ -158,9 +171,11 @@ function insertBall(){
     };
 
     addBall(newBall);
+    setCookie('ballSubmitted', 'true', 1);
 
 
     isFillingForm = false;
+
    
 
     p5Instance.remove();
@@ -169,7 +184,12 @@ function insertBall(){
 
 
 
-
+function setCookie(name, value, days) {
+  const date = new Date();
+  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  const expires = "expires=" + date.toUTCString();
+  document.cookie = `${name}=${value};${expires};path=/`;
+}
 
 
 //PLACERINGS SKETCH
@@ -182,7 +202,7 @@ function buildPlacementSketch(){
         let mouseDown;
 
         let ballX = 1000;
-        let ballY = 1400;
+        let ballY = 1000;
         
 
 p.preload = () => {
@@ -285,9 +305,9 @@ p.preload = () => {
     p.push()
     p.translate(1000,1000);
     p.scale(5);
-    p.fill(ballBackgroundColor.value);
     p.noStroke();
-    p.circle(2, 28, 285, 285);
+    p.fill(ballBackgroundColor.value);
+    p.circle(2, 29, 285, 285);
     p.pop();
 
 
@@ -297,7 +317,7 @@ p.preload = () => {
    //Læg billedet på
    p.push()
     p.translate(1000,1000);
-    p.scale(3.333);
+    p.scale(2.5);
     p.imageMode(p.CENTER);
     p.image(ballImg1, 0, 0);
     p.pop();
@@ -343,13 +363,22 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 
 <template>
 
+<Transition name="fade">
 <div v-if="isPainting" class="canvas-container">
     <div class="overlay">
             <div class="drawing-io">
-                <input type="color" v-model="ballBackgroundColor"></input>
-                <input type="color" v-model="brushColor"></input>
-                <button @click="clearDrawing">Ny tegning</button>
-                <button @click="finishDrawing">Gem kugle</button>
+                <div id="ball-color-selector-container" class="color-selector-container">
+                    <label for="ballColorSelector">Baggrundsfarve</label>
+                    <div name="ballColorSelector" class="color-selectors"><input class="color-selectors" id="ballColorSelector" type="color" v-model="ballBackgroundColor"></input></div>
+                </div>
+
+                <div id="brush-color-selector-container" class="color-selector-container">
+                    <label for="brushColorSelector">Tegnefarve</label>
+                    <div name="brushColorSelector" class="color-selectors"><input class="color-selectors" id="brushColorSelector" type="color" v-model="brushColor"></input></div>
+                </div>
+                
+                <button class="drawing-buttons" id="clear-drawing-button" @click="clearDrawing">Slet tegning</button>
+                <button class="drawing-buttons" id="finish-drawing-button" @click="finishDrawing">Gem kugle</button>
                 
                 <!-- <input type="radio" v-model="isErasing" name="brush" value="false" checked>
                 <input type="radio" v-model="isErasing" name="brush" value="true"> -->
@@ -357,32 +386,224 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
         <div ref="drawingCanvas"></div>
     </div>
 </div>
+</Transition>
 
 
 <button class="start-buttons" id="trigger-form-button" v-if="isPlacing" @click="triggerForm">Gem din<br>julekugle</button>
 <button class="start-buttons" id="back-button" v-if="isPlacing" @click="backToDraw">Tilbage</button>
 
+<div id="place-guide" v-if="isPlacing">
+    <div>    
+        <h2>Placer din julekugle</h2>
+        <p>Vælg med omhu – kuglen kan ikke<br> ændres igen</p>
+    </div>
+</div>
 
+
+
+<Transition name="fade">
 <div class="form" v-if="isFillingForm">
     <div class="overlay">
         <div class="form-container">
+            <div>
+                <input class="input-fields" type="text" name="name" v-model="userName" placeholder="Dit navn" required></input>
+                <input class="input-fields" type="text" name="student-class" v-model="userClass" placeholder="Evt. din klasse"></input>
             
-            <input type="text" name="name" v-model="userName" placeholder="Dit navn" required></input>
-            <input type="text" name="student-class" v-model="userClass" placeholder="Evt. din klasse"></input>
-            <button class="start-buttons" id="save-ball-button" @click="insertBall">Gem din<br>julekugle</button>
-            <button class="start-buttons" id="back-to-placing-button" @click="backToPlacing">Tilbage</button>
-
-
+                <div>
+                <button class="start-buttons" id="back-to-placing-button" @click="backToPlacing">Tilbage</button>
+                <div id="save-ball-button-container">
+                    <button class="start-buttons" id="save-ball-button" @click="insertBall">Gem din<br>julekugle</button>
+                    <p>Den vil ikke længere <br> kunne ændres</p>
+                </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+</Transition>
+
+
 
 </template>
 
 
 
 <style>
+#save-ball-button-container{
+    display: flex;
+    flex-direction: column;
+    column-gap: 0;
+    gap: 0;
+}
+
+#save-ball-button-container p{
+    margin: 0;
+    margin-top: 10px;
+    text-align: center;
+    line-height: 1;
+    font-family: 'Space Grotesk';
+    color: red;
+}
+
+
+.drawing-buttons{
+    line-height: 1.1;
+    padding: 10px;
+    background-color: rgba(0,0,0,0);
+    font-size: 3rem;
+    font-family: 'Space Grotesk';
+    border: solid 3px;
+    position: absolute;
+    top: 84vh;
+}
+
+#finish-drawing-button{
+    left: 81.4vh;
+    background-color: #697C5C;
+    border-color: #3D3D3D;
+    color: #F9ED7A;
+}
+
+#finish-drawing-button:hover{
+    background-color: #757b71;
+    border-color: #eeeeee;
+    color: #F9ED7A;
+}
+
+#clear-drawing-button:hover{
+    background-color: #777777;
+    border-color: #eeeeee;
+    color: #eeeeee;
+}
+
+#clear-drawing-button{
+    left: 1vh;
+    background-color: #777777;
+    color: #3D3D3D;
+}
+
+
+#ball-color-selector-container{
+    position: absolute;
+    align-items: start;
+    left: 1vh;
+    top: 1vh;
+}
+
+#brush-color-selector-container{
+    align-items: end;
+    position: absolute;
+    left: 79.4vh;
+    top: 1vh;
+}
+
+
+.color-selector-container{
+display: flex;
+flex-direction: column;
+color: #eeeeee;
+font-family: 'Space Grotesk';
+font-size: 2rem;
+}
+
+
+div.color-selectors{
+    border: solid 3px #eeeeee;
+    border-radius: 100%;
+    overflow: hidden;
+    height: 140px;
+    width: 140px;  
+}
+
+input.color-selectors{
+    position: relative;
+    left: -10px;
+    top: -10px;
+    background-color: rgba(0,0,0,0);
+    height: 200px;
+    width: 200px;  
+    padding: 0px -0px;
+    overflow: hidden;
+}
+
+
+.overlay{
+    background-color: rgba(0,0,0, 0.75);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 3 !important;
+}
+
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  z-index: 3;
+}
+
+
+.input-fields{
+    display: block;
+    font-size: 5vh;
+    font-family: 'Space Grotesk';
+    margin: 40px 0;
+    background-color: rgba(0,0,0,0);
+    border: solid 3px #F9ED7A;
+    color: #F9ED7A;
+}
+
+.form-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+.form-container div div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+
+#place-guide{
+    position: absolute;
+    top: 0;
+    font-family: 'Space Grotesk';
+    line-height: 0;
+    background-image: url('/banner.png');
+    background-size: 100%;
+    background-position: center;
+    padding: 5rem;
+    left: 50vh;
+    top: 36vh
+}
+
+#place-guide h1{
+    color: #3D3D3D;
+    line-height: 0;
+    margin: 0;
+}
+
+#place-guide p{
+    color: red;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+}
+
+
 #trigger-form-button{
+    top: 30vh;
+    left: 10vh;
     background-color: #697C5C;
     color: #F9ED7A;
 }
@@ -394,6 +615,7 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 
 
 #save-ball-button{
+    position: relative;
     background-color: #697C5C;
     color: #F9ED7A;
 }
@@ -405,8 +627,8 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 
 
 #back-to-placing-button{
+    position: relative;
     background-color: #D17475;
-    top: 46vh;
 }
 
 #back-to-placing-button:hover{
@@ -419,6 +641,7 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 /* #D17475 #697C5C  #716053 */
 #back-button{
     background-color: #D17475;
+    left: 10vh;
     top: 46vh;
 }
 
@@ -432,15 +655,23 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
     display: none;
 }
 
-.drawing-io{
+
+#defaultCanvas1{
+    position: absolute;
+    z-index: 4;
+    pointer-events: none;
+}
+
+#defaultCanvas2{
     position: absolute;
     z-index: 2;
 }
 
-#defaultCanvas1{
+.drawing-io{
     position: absolute;
-    z-index: 1;
+    z-index: 5;
 }
+
 
 .canvas-container{
     position: absolute;
@@ -456,11 +687,7 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
     width: 100vh;
 }
 
-.overlay{
-    background-color: rgba(0,0,0,0.8);
-    width: 100%;
-    height: 100%;
-}
+
 
 
 </style>
