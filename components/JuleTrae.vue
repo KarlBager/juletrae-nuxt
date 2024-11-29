@@ -142,6 +142,9 @@ p.preload = () => {
       p.frameRate(1);
     }
 
+    if(props.hoverBoxesEnabled){
+      p.frameRate(60);
+    }
 
     p.clear();
     p.fill('#D17475');
