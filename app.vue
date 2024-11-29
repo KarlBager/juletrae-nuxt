@@ -104,7 +104,7 @@ font-size: 5vh;
 background: #697C5C;
 border: solid 3px #3D3D3D;
 color: #F9ED7A;
-font-family: 'Space Grotesk';
+font-family: 'Space Grotesk' !important;
 }
 
 .start-buttons:hover{

@@ -551,11 +551,11 @@ div.color-selectors{
 
 input.color-selectors{
     position: relative;
-    left: -10px;
-    top: -10px;
+    left: -21vh;
+    top: -15vh;
     background-color: rgba(0,0,0,0);
-    height: 300px;
-    width: 300px;  
+    height: 100vh;
+    width: 100vh;  
     padding: 0px -0px;
     overflow: hidden;
 }
