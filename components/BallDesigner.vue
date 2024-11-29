@@ -589,7 +589,7 @@ input.color-selectors{
     margin: 40px 0;
     background-color: rgba(0,0,0,0);
     border: solid 3px #697C5C;
-    color: #F9ED7A;
+    color: #3D3D3D;
 }
 
 .form-container{
