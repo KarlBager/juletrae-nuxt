@@ -536,7 +536,7 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 display: flex;
 flex-direction: column;
 color: #eeeeee;
-font-family: 'Space Grotesk';
+font-family: space-grotesk-variable, sans-serif;
 font-size: 3.4vh;
 }
 
