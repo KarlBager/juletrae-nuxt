@@ -475,7 +475,7 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
     margin-top: 10px;
     text-align: center;
     line-height: 1;
-    font-family: 'Space Grotesk';
+    font-family: space-grotesk-variable, sans-serif;
     color: red;
 }
 
@@ -485,7 +485,7 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
     padding: 10px;
     background-color: rgba(0,0,0,0);
     font-size: 5vh;
-    font-family: 'Space Grotesk';
+    font-family: space-grotesk-variable, sans-serif;
     border: solid 3px;
     position: absolute;
     top: 84.2vh;
@@ -585,7 +585,7 @@ input.color-selectors{
 .input-fields{
     display: block;
     font-size: 5vh;
-    font-family: 'Space Grotesk';
+    font-family: space-grotesk-variable, sans-serif;
     margin: 40px 0;
     background-color: rgba(0,0,0,0);
     border: solid 3px #F9ED7A;
@@ -611,7 +611,7 @@ input.color-selectors{
 #place-guide{
     position: absolute;
     top: 0;
-    font-family: 'Space Grotesk';
+    font-family: space-grotesk-variable, sans-serif;
     line-height: 0;
     background-image: url('/banner.png');
     background-size: 100%;

@@ -13,7 +13,8 @@ export default defineNuxtConfig({
   head: {
     title: "CD's Juletræ",
     link: [
-      { rel: 'stylesheet', href: 'https://use.typekit.net/brt8wqh.css' }
+      { rel: 'stylesheet', href: 'https://use.typekit.net/brt8wqh.css' },
+      { rel: 'preload', href: 'https://use.typekit.net/brt8wqh.css', as: 'style' }
     ]
   },
 },
