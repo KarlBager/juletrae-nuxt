@@ -4,6 +4,8 @@ import BallDesigner from './components/BallDesigner.vue';
 import { ref, onMounted } from 'vue';
 
 
+
+
 let ballExists = ref(false);
 let designingBall = ref(false);
 let shouldReload = ref(false);
@@ -55,6 +57,9 @@ onMounted(() => {
   if(isBallSubmitted){
     ballExists.value = true;
   }
+
+
+  document.addEventListener('touchstart', {}); // in iframe
 
 })
 
@@ -127,6 +132,7 @@ html{
   background-color: white;
   width: 100vh;
   height: 100vh;
+  touch-action: none;
 }
 
 body{
