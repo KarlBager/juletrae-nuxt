@@ -482,17 +482,17 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 
 .drawing-buttons{
     line-height: 1.1;
-    padding: 10px;
+    padding: 1vh;
     background-color: rgba(0,0,0,0);
     font-size: 5vh;
     font-family: space-grotesk-variable, sans-serif;
     border: solid 3px;
     position: absolute;
-    top: 84.2vh;
+    top: 84.8vh;
 }
 
 #finish-drawing-button{
-    left: 81.8vh;
+    left: 82.4vh;
     background-color: #697C5C;
     border-color: #3D3D3D;
     color: #F9ED7A;
@@ -535,14 +535,14 @@ p5Instance = new $p5(sketch, drawingCanvas.value);
 .color-selector-container{
 display: flex;
 flex-direction: column;
-color: #eeeeee;
+color: #3D3D3D;
 font-family: space-grotesk-variable, sans-serif;
 font-size: 3.4vh;
 }
 
 
 div.color-selectors{
-    border: solid 3px #eeeeee;
+    border: solid 3px #3D3D3D;
     border-radius: 100%;
     overflow: hidden;
     height: 19.3vh;
@@ -562,7 +562,7 @@ input.color-selectors{
 
 
 .overlay{
-    background-color: rgba(0,0,0, 0.75);
+    background-color: #E9E0D3;
     width: 100%;
     height: 100%;
     position: absolute;
@@ -588,7 +588,7 @@ input.color-selectors{
     font-family: space-grotesk-variable, sans-serif;
     margin: 40px 0;
     background-color: rgba(0,0,0,0);
-    border: solid 3px #F9ED7A;
+    border: solid 3px #697C5C;
     color: #F9ED7A;
 }
 
