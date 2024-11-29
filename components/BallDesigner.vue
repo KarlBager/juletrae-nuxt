@@ -236,6 +236,7 @@ p.preload = () => {
     p.circle(ballX, ballY + 15, 140, 140);
 
     //Læg tegning på
+    p.noStroke();
     drawDrawing(p, ballX, ballY);
 
     //Læg billedet på
@@ -348,9 +349,7 @@ p.preload = () => {
             drawLayer.noStroke();
             drawLayer.circle(p.mouseX, p.mouseY, 50);
 
-            drawingCode.value += `
-            p.fill('${brushColor.value}');
-            p.noStroke();
+            drawingCode.value += `p.fill('${brushColor.value}');
             p.circle(${p.mouseX}, ${p.mouseY}, 50);
             `
            
