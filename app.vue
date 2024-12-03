@@ -5,11 +5,16 @@ import { ref, onMounted } from 'vue';
 
 
 
-
 let ballExists = ref(false);
 let designingBall = ref(false);
 let shouldReload = ref(false);
 let hoverBoxesEnabled = ref(true);
+
+let sketchLoaded = ref(false);
+
+function sketchHasLoaded(){
+  sketchLoaded.value = true;
+}
 
 
 function triggerBallDesigner(){
@@ -27,8 +32,6 @@ function finishBallDesign(){
 function disableHoverBoxes(){
   hoverBoxesEnabled.value = false;
 }
-
-
 
 
 function reloadJuletrae(){
@@ -72,9 +75,10 @@ onMounted(() => {
 
 
 
-    <JuleTrae @isReloaded="juletraeReloaded" :shouldReload="shouldReload" :hoverBoxesEnabled="hoverBoxesEnabled"/>
+    <JuleTrae @isReloaded="juletraeReloaded" @hasBeenLoaded="sketchHasLoaded" :shouldReload="shouldReload" :hoverBoxesEnabled="hoverBoxesEnabled"/>
 
-    <button class="start-buttons" id="start-button" v-if="!ballExists && !designingBall" @click="triggerBallDesigner">Tilføj din <br>julekugle</button>
+    <button class="start-buttons" id="start-button-loading" v-if="!sketchLoaded">Loading ...</button>
+    <button class="start-buttons" id="start-button" v-if="!ballExists && !designingBall && sketchLoaded" @click="triggerBallDesigner">Tilføj din <br>julekugle</button>
     
     <BallDesigner @ballFinished="finishBallDesign" @placingBall="disableHoverBoxes" v-if="designingBall" />
 
@@ -95,9 +99,18 @@ onMounted(() => {
 <style>
 
 
+
 #start-button{
   top: 30vh;
   left: 10vh;
+}
+
+
+#start-button-loading{
+  top: 30vh;
+  left: 10vh;
+  background-color: #aaaaaa;
+  color: #3D3D3D;
 }
 
 .start-buttons{
@@ -111,6 +124,8 @@ border: solid 3px #3D3D3D;
 color: #F9ED7A;
 font-family: space-grotesk-variable, sans-serif;
 }
+
+
 
 .start-buttons:hover{
 background: #D17475;

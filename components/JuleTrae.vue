@@ -2,7 +2,7 @@
 import { watch, defineProps, ref, onMounted, onUnmounted } from 'vue';
 import { useNuxtApp } from '#app';
 
-const emit = defineEmits(['isReloaded']);
+const emit = defineEmits(['isReloaded', 'hasBeenLoaded']);
 
 
 // Define a ref for the container
@@ -133,11 +133,16 @@ p.preload = () => {
 
 
   p.setup = () => {
+    
     p.pixelDensity(1);
     p.createCanvas(2000, 2000, p.P2D);
   };
 
   p.draw = () => {
+
+    emit('hasBeenLoaded');  // Emit after everything is loaded
+    console.log("test");
+
     if(!props.hoverBoxesEnabled){
       p.frameRate(1);
     }
