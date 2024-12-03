@@ -220,7 +220,13 @@ function hoverBox(p, ballArray, mouseX, mouseY){
       p.fill("#3D3D3D");
       p.textSize(42);
       p.textAlign(p.CENTER);
+
+      if(ballClass != ""){
       p.text(`${ballName}, ${ballClass}`, mouseX + 300, mouseY - 12);
+      } else{
+      p.text(`${ballName}`, mouseX + 300, mouseY - 12);
+      }
+      
       p.textSize(28);
       p.text(`${ballTimeFormatted}`, mouseX + 300, mouseY + 30);
     }
